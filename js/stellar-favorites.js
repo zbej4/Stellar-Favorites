@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 
   //Event Listener for Favorite button
-  $('.stellar-favorite').click(function() {
+  $(document).on('click', '.stellar-favorite', function() {
     var element = $(this);
     var postID = element.data('postid');
     var groupSlug = element.data('groupslug');
@@ -25,10 +25,9 @@ jQuery(document).ready(function($) {
           default:
             console.log('Error: ' + data.error);
         }
-      }
-      else if (data.status == 'success') {
+      } else if (data.status == 'success') {
         console.log('Post: ' + data.post_id + '\nGroup: ' + data.group_slug);
-        $(element).toggleClass('active');
+        $(element).toggleClass('sfavorite-active');
       }
     }).fail(function(data) {
       console.log('Failed AJAX Call /// Return Data: ');
@@ -59,7 +58,7 @@ jQuery(document).ready(function($) {
           //if group in favorite array
           //add active class to corresponding group
           if ($.inArray(group_slug, data.groups) !== -1) {
-            $(this).addClass('active');
+            $(this).addClass('sfavorite-active');
           }
         });
       }

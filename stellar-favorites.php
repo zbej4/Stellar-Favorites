@@ -187,7 +187,7 @@ function get_favorite_list($atts)
     }
 
     //If group slug is not a valid group
-    if ( ! in_array($group_slug, $approvedGroups)) {
+    if (($group_slug != '') && ! in_array($group_slug, $approvedGroups)) {
         return $group_slug . ' is not a valid group';
     }
 
@@ -203,9 +203,18 @@ function get_favorite_list($atts)
             $group = $currentFavorites[$group_slug];
 
             foreach ($group as $item) {
-                echo '<li>' . $item . '</li>';
-            }
-            ?>
+                $post = get_post($item);
+                ?>
+                <div class="post-preview">
+                    <div class="post-thumbnail">
+                        <?php echo get_the_post_thumbnail($post); ?>
+                    </div>
+                    <div class="post-title">
+                        <a href="<?php get_the_permalink($post); ?>"><?php echo $post->post_title; ?> <i
+                                    class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            <?php } ?>
         </ul>
         <?php
     } else {
@@ -219,8 +228,18 @@ function get_favorite_list($atts)
                     <?= $key ?>
                     <ul class="favorite-group">
                         <?php foreach ($group as $item) {
-                            echo '<li>' . $item . '</li>';
-                        } ?>
+                            $post = get_post($item);
+                            ?>
+                            <div class="post-preview">
+                                <div class="post-thumbnail">
+                                    <?php echo get_the_post_thumbnail($post); ?>
+                                </div>
+                                <div class="post-title">
+                                    <a href="<?php get_the_permalink($post); ?>"><?php echo $post->post_title; ?> <i
+                                                class="fa fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </ul>
                 </li>
                 <?php
@@ -230,7 +249,7 @@ function get_favorite_list($atts)
         <?php
     }
 
-    return do_filter('sfavorite_list', ob_get_clean());
+    return apply_filters('sfavorite_list', ob_get_clean());
 }
 
 add_shortcode('sfavorite_list', 'get_favorite_list');
